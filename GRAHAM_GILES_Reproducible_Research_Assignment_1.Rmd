@@ -1,0 +1,155 @@
+---
+title: "Reproducible Research Assignment 1"
+author: "Graham Giles"
+date: "Thursday, April 16, 2015"
+output: html_document
+---
+
+This is an analysis of the number of steps taken by a certain individual.
+
+**What is mean total number of steps taken per day?**
+
+This is the R code.
+
+```{r}
+data1 <- na.omit(read.csv("activity.csv"))
+data2 <- aggregate(steps ~ date, data = data1, FUN = sum)
+abc <- data2[2]
+abc1 <- abc[2:nrow(abc),]
+```
+
+This is the mean number of steps taken per day:
+```{r}
+mean(abc1)
+```
+
+This is the median number of steps taken per day:
+```{r}
+median(abc1)
+```
+
+Here is a plot of the data:
+
+```{r}
+hist(data2$steps, main = "Histogram of Total Steps per Day", xlab = "Number of Steps per Day")
+```
+
+
+
+**What is the average daily activity pattern?**
+
+This is the R code.
+
+```{r}
+data3 <- aggregate(steps ~ interval, data = data1, FUN = mean)
+```
+
+Here is a plot of the data.
+
+```{r}
+plot(data3, type = "l", main = "Average Daily Activity Pattern")
+```
+
+This is the 5-minute interval which, on average accross all the days in the dataset, contains the maximum number of steps.
+
+```{r}
+abc <- data3[2]
+abc1 <- abc[2:nrow(abc),]
+abc2 <- subset(data3, data3[2] == max(abc1))
+abc3 <- abc2[1,1]
+abc3
+```
+
+
+
+**Imputing missing values**
+
+The following is the number of NA values in the data set:
+
+```{r}
+data0 <- read.csv("activity.csv")
+na1 <- nrow(is.na(data0[1]))
+na1
+```
+
+
+In order to fill in the missing data in the data set, an NA values will be replaced with the average for that 5-second interval.
+
+See R code below for the new data set which uses the strategy to replace NA values. This is described above.
+
+```{r}
+
+##Aggregate each interval by taking the mean.
+data4 <- aggregate(steps ~ interval, data = data1, FUN = mean)
+df <- data.frame()
+
+##For each interval:
+for (n in data0[3]) {
+  ##Create a subsetted data set (def0) for interval n.
+  def0 <- subset(data0, data0[3] == n)
+  ##From the mean aggregated data set above (data4), subset for interval n.
+  def1 <- subset(data4, data4$interval == n)
+  as.character(def0$steps)
+  ##Replace NA values with the mean steps taken for interval n in data set def0
+  def0[is.na(def0)] <- def1[1,2]
+  ##Append processed data to new dataframe.
+  df <- rbind(df, def0)
+}
+```
+
+This is the mean number of steps taken per day, with NAs replace using methodology described above:
+```{r}
+
+data5 <- aggregate(steps ~ date, data = df, FUN = sum)
+abc5 <- data5[2]
+abc51 <- abc5[2:nrow(abc5),]
+mean(abc51)
+```
+
+This is the median number of steps taken per day, with NAs replace using methodology described above:
+```{r}
+median(abc51)
+```
+
+Here is a plot of the data:
+
+```{r}
+hist(data5$steps, main = "Histogram of Total Steps per Day", xlab = "Number of Steps per Day")
+```
+
+The following differences were noted in the original dataset, and the dataset with NA values replaced using the methodolgy described above.
+
+1. The mean and median values are slightly different
+2. The data is more left skewed
+
+Furthermore, there appears to have been certain days within the date range that had NA values for the entire day. Replacing the NA values using the methodology described above adds days that were not included in the original data set.
+
+
+
+**Are there differences in activity patterns between weekdays and weekends?**
+
+Here is the associated R code:
+
+```{r}
+##Convert the date column into days of the week
+df$date <- as.Date(as.character(df$date))
+df$date <- weekdays(df$date)
+
+##Subset data into 2 data sets: one for weekdays (dfwkdy) and one for weekends (dfwknd)
+
+dfwkdy <- subset(df, df$date == "Monday" | df$date == "Tuesday" | df$date == "Wednesday" | df$date == "Thursday" | df$date == "Friday")
+dfwknd <- subset(df, df$date == "Saturday" | df$date == "Sunday")
+
+##Aggregate data to show mean number of steps taken per 5-minute interval, averaged accross all days. Perform this aggregation on both weekday and weekend data sets.
+dfwkdyagg <- aggregate(steps ~ interval, data = dfwkdy, FUN = mean)
+dfwkndagg <- aggregate(steps ~ interval, data = dfwknd, FUN = mean)
+```
+
+Here are the plots:
+
+```{r}
+par(mfrow = c(2,1))
+plot(dfwkndagg$interval, dfwkndagg$steps, xlab = "Interval", ylab = "Number of steps", main ="Weekend", type ="l")
+
+plot(dfwkdyagg$interval, dfwkdyagg$steps, xlab = "Interval", ylab = "Number of steps", main = "Weekday", type ="l")
+```
