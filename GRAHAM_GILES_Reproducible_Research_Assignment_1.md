@@ -14,39 +14,9 @@ This is the R code.
 
 ```r
 data1 <- na.omit(read.csv("activity.csv"))
-```
-
-```
-## Warning in file(file, "rt"): cannot open file 'activity.csv': No such file
-## or directory
-```
-
-```
-## Error in file(file, "rt"): cannot open the connection
-```
-
-```r
 data2 <- aggregate(steps ~ date, data = data1, FUN = sum)
-```
-
-```
-## Error in eval(expr, envir, enclos): object 'data1' not found
-```
-
-```r
 abc <- data2[2]
-```
-
-```
-## Error in eval(expr, envir, enclos): object 'data2' not found
-```
-
-```r
 abc1 <- abc[2:nrow(abc),]
-```
-
-```
-## Error in eval(expr, envir, enclos): object 'abc' not found
 ```
 
 This is the mean number of steps taken per day:
@@ -56,7 +26,7 @@ mean(abc1)
 ```
 
 ```
-## Error in mean(abc1): object 'abc1' not found
+## [1] 10970.81
 ```
 
 This is the median number of steps taken per day:
@@ -66,7 +36,7 @@ median(abc1)
 ```
 
 ```
-## Error in median(abc1): object 'abc1' not found
+## [1] 10890
 ```
 
 Here is a plot of the data:
@@ -76,9 +46,7 @@ Here is a plot of the data:
 hist(data2$steps, main = "Histogram of Total Steps per Day", xlab = "Number of Steps per Day")
 ```
 
-```
-## Error in hist(data2$steps, main = "Histogram of Total Steps per Day", : object 'data2' not found
-```
+![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png) 
 
 
 
@@ -91,10 +59,6 @@ This is the R code.
 data3 <- aggregate(steps ~ interval, data = data1, FUN = mean)
 ```
 
-```
-## Error in eval(expr, envir, enclos): object 'data1' not found
-```
-
 Here is a plot of the data.
 
 
@@ -102,51 +66,21 @@ Here is a plot of the data.
 plot(data3, type = "l", main = "Average Daily Activity Pattern")
 ```
 
-```
-## Error in plot(data3, type = "l", main = "Average Daily Activity Pattern"): object 'data3' not found
-```
+![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png) 
 
 This is the 5-minute interval which, on average accross all the days in the dataset, contains the maximum number of steps.
 
 
 ```r
 abc <- data3[2]
-```
-
-```
-## Error in eval(expr, envir, enclos): object 'data3' not found
-```
-
-```r
 abc1 <- abc[2:nrow(abc),]
-```
-
-```
-## Error in eval(expr, envir, enclos): object 'abc' not found
-```
-
-```r
 abc2 <- subset(data3, data3[2] == max(abc1))
-```
-
-```
-## Error in subset(data3, data3[2] == max(abc1)): object 'data3' not found
-```
-
-```r
 abc3 <- abc2[1,1]
-```
-
-```
-## Error in eval(expr, envir, enclos): object 'abc2' not found
-```
-
-```r
 abc3
 ```
 
 ```
-## Error in eval(expr, envir, enclos): object 'abc3' not found
+## [1] 835
 ```
 
 
@@ -158,31 +92,12 @@ The following is the number of NA values in the data set:
 
 ```r
 data0 <- read.csv("activity.csv")
-```
-
-```
-## Warning in file(file, "rt"): cannot open file 'activity.csv': No such file
-## or directory
-```
-
-```
-## Error in file(file, "rt"): cannot open the connection
-```
-
-```r
 na1 <- nrow(is.na(data0[1]))
-```
-
-```
-## Error in nrow(is.na(data0[1])): object 'data0' not found
-```
-
-```r
 na1
 ```
 
 ```
-## Error in eval(expr, envir, enclos): object 'na1' not found
+## [1] 17568
 ```
 
 
@@ -194,13 +109,6 @@ See R code below for the new data set which uses the strategy to replace NA valu
 ```r
 ##Aggregate each interval by taking the mean.
 data4 <- aggregate(steps ~ interval, data = data1, FUN = mean)
-```
-
-```
-## Error in eval(expr, envir, enclos): object 'data1' not found
-```
-
-```r
 df <- data.frame()
 
 ##For each interval:
@@ -217,42 +125,17 @@ for (n in data0[3]) {
 }
 ```
 
-```
-## Error in eval(expr, envir, enclos): object 'data0' not found
-```
-
 This is the mean number of steps taken per day, with NAs replace using methodology described above:
 
 ```r
 data5 <- aggregate(steps ~ date, data = df, FUN = sum)
-```
-
-```
-## Error in eval(expr, envir, enclos): object 'steps' not found
-```
-
-```r
 abc5 <- data5[2]
-```
-
-```
-## Error in eval(expr, envir, enclos): object 'data5' not found
-```
-
-```r
 abc51 <- abc5[2:nrow(abc5),]
-```
-
-```
-## Error in eval(expr, envir, enclos): object 'abc5' not found
-```
-
-```r
 mean(abc51)
 ```
 
 ```
-## Error in mean(abc51): object 'abc51' not found
+## [1] 9567.824
 ```
 
 This is the median number of steps taken per day, with NAs replace using methodology described above:
@@ -262,7 +145,7 @@ median(abc51)
 ```
 
 ```
-## Error in median(abc51): object 'abc51' not found
+## [1] 10417
 ```
 
 Here is a plot of the data:
@@ -272,9 +155,7 @@ Here is a plot of the data:
 hist(data5$steps, main = "Histogram of Total Steps per Day", xlab = "Number of Steps per Day")
 ```
 
-```
-## Error in hist(data5$steps, main = "Histogram of Total Steps per Day", : object 'data5' not found
-```
+![plot of chunk unnamed-chunk-12](figure/unnamed-chunk-12-1.png) 
 
 The following differences were noted in the original dataset, and the dataset with NA values replaced using the methodolgy described above.
 
@@ -302,18 +183,7 @@ dfwknd <- subset(df, df$date == "Saturday" | df$date == "Sunday")
 
 ##Aggregate data to show mean number of steps taken per 5-minute interval, averaged accross all days. Perform this aggregation on both weekday and weekend data sets.
 dfwkdyagg <- aggregate(steps ~ interval, data = dfwkdy, FUN = mean)
-```
-
-```
-## Error in eval(expr, envir, enclos): object 'steps' not found
-```
-
-```r
 dfwkndagg <- aggregate(steps ~ interval, data = dfwknd, FUN = mean)
-```
-
-```
-## Error in eval(expr, envir, enclos): object 'steps' not found
 ```
 
 Here are the plots:
@@ -322,16 +192,8 @@ Here are the plots:
 ```r
 par(mfrow = c(2,1))
 plot(dfwkndagg$interval, dfwkndagg$steps, xlab = "Interval", ylab = "Number of steps", main ="Weekend", type ="l")
-```
 
-```
-## Error in plot(dfwkndagg$interval, dfwkndagg$steps, xlab = "Interval", : object 'dfwkndagg' not found
-```
-
-```r
 plot(dfwkdyagg$interval, dfwkdyagg$steps, xlab = "Interval", ylab = "Number of steps", main = "Weekday", type ="l")
 ```
 
-```
-## Error in plot(dfwkdyagg$interval, dfwkdyagg$steps, xlab = "Interval", : object 'dfwkdyagg' not found
-```
+![plot of chunk unnamed-chunk-14](figure/unnamed-chunk-14-1.png) 
